@@ -1,0 +1,31 @@
+Match_ID,Date,Venue,Team_A,Team_B,Stage,Team_A_Ranking,Team_B_Ranking,Team_A_Form,Team_B_Form,HeadToHead_A_Wins,HeadToHead_B_Wins,Venue_HomeAdvantage_A,Venue_HomeAdvantage_B,Pitch_Type,Avg_T20_Score_Venue,Toss_Winner,Toss_Decision,Team_A_Tech_Index,Team_B_Tech_Index,Match_Total,Winner
+M0571,20-02-2026,Delhi,Scotland,Ireland,Group,13,12,55.36,63.36,13,14,0,0,Pace-Friendly,170,Team_B,Bat,166.15,176.94,201,Team_B
+M0572,04-03-2026,Chennai,Netherlands,South Africa,SemiFinal,11,6,54.59,80.67,0,0,0,0,Spin-Friendly,155,Team_A,Field,172.24,260.68,176,Team_B
+M0573,23-02-2026,Colombo,Namibia,West Indies,Group,15,7,56.29,71.8,5,12,0,0,Spin-Friendly,160,Team_B,Field,134.1,232.04,180,Team_B
+M0574,08-02-2026,Delhi,PNG,New Zealand,Final,20,5,34.58,84.92,2,10,0,0,Pace-Friendly,170,Team_A,Field,70.07,271.02,156,Team_B
+M0575,05-03-2026,Chennai,Nepal,Bangladesh,Group,19,10,54.09,53.55,5,15,0,0,Spin-Friendly,155,Team_A,Field,87.02,172.44,164,Team_B
+M0576,24-02-2026,Delhi,Australia,Bangladesh,Group,2,10,67.86,70.48,21,8,0,0,Pace-Friendly,170,Team_B,Bat,289.76,202.59,195,Team_A
+M0577,26-02-2026,Colombo,Ireland,Oman,Group,12,16,46.21,51.72,3,3,0,0,Spin-Friendly,160,Team_A,Field,168.36,124.99,145,Team_A
+M0578,22-02-2026,Delhi,India,Namibia,Group,1,15,74.29,53.97,18,6,1,0,Pace-Friendly,170,Team_B,Field,302.69,130.99,196,Team_A
+M0579,11-02-2026,Colombo,India,England,Group,1,3,74.03,52.1,12,15,0,0,Spin-Friendly,160,Team_A,Field,314.86,255.14,150,Team_B
+M0580,25-02-2026,Delhi,India,Bangladesh,Group,1,10,76.71,65.59,9,3,1,0,Pace-Friendly,170,Team_A,Bat,312.03,193.72,212,Team_A
+M0581,16-02-2026,Colombo,Pakistan,PNG,Final,4,20,68.19,35.89,22,0,0,0,Spin-Friendly,160,Team_B,Field,272.03,46.87,172,Team_A
+M0582,06-03-2026,Kandy,Sri Lanka,Pakistan,Group,9,4,69.89,73.16,13,17,1,0,Pace-Friendly,162,Team_B,Field,214.28,281.31,161,Team_B
+M0583,12-02-2026,Kolkata,India,USA,SemiFinal,1,17,83.11,29.1,24,3,1,0,Spin-Friendly,165,Team_A,Bat,307.91,88.68,153,Team_A
+M0584,01-03-2026,Colombo,Sri Lanka,Ireland,Group,9,12,64.77,59.24,13,10,1,0,Spin-Friendly,160,Team_A,Bat,220.51,160.84,203,Team_A
+M0585,24-02-2026,Chennai,Sri Lanka,Zimbabwe,Super8,9,14,95,42.77,1,0,0,0,Spin-Friendly,155,Team_A,Field,234.9,133.09,149,Team_A
+M0586,15-02-2026,Ahmedabad,Ireland,West Indies,Group,12,7,56.73,59.74,8,11,0,0,Flat,180,Team_A,Bat,158.82,227.57,175,Team_B
+M0587,14-02-2026,Kolkata,Namibia,Oman,Group,15,16,31.35,50.28,11,12,0,0,Spin-Friendly,165,Team_B,Field,109.91,113.92,159,Team_A
+M0588,07-02-2026,Kolkata,Scotland,Pakistan,Group,13,4,56.29,71.3,1,0,0,0,Spin-Friendly,165,Team_B,Field,148.58,269.85,165,Team_B
+M0589,24-02-2026,Kandy,Australia,New Zealand,Group,2,5,64.33,77.93,17,12,0,0,Pace-Friendly,162,Team_B,Field,282.25,268.91,142,Team_A
+M0590,12-02-2026,Delhi,Namibia,Zimbabwe,Group,15,14,67.75,54.29,5,13,0,0,Pace-Friendly,170,Team_B,Field,143.07,149.88,158,Team_B
+M0591,27-02-2026,Delhi,Canada,Zimbabwe,Group,18,14,41.19,60.96,8,12,0,0,Pace-Friendly,170,Team_B,Field,92.3,150.55,223,Team_B
+M0592,21-02-2026,Ahmedabad,Ireland,Zimbabwe,Group,12,14,45.65,42.78,7,2,0,0,Flat,180,Team_B,Bat,155,134.7,219,Team_A
+M0593,05-03-2026,Delhi,Ireland,PNG,Super8,12,20,66.62,27.84,17,7,0,0,Pace-Friendly,170,Team_A,Bat,195.19,57.73,143,Team_A
+M0594,03-03-2026,Chennai,Pakistan,Afghanistan,Group,4,8,82.74,65.7,8,7,0,0,Spin-Friendly,155,Team_B,Bat,268.61,230.09,156,Team_A
+M0595,04-03-2026,Kolkata,England,Netherlands,Group,3,11,83.01,88.15,0,0,0,0,Spin-Friendly,165,Team_B,Bat,299.97,195.88,156,Team_A
+M0596,12-02-2026,Kolkata,England,Zimbabwe,Group,3,14,77.24,61.1,19,3,0,0,Spin-Friendly,165,Team_B,Field,294.94,154.29,164,Team_A
+M0597,14-02-2026,Colombo,Australia,England,Group,2,3,85.5,78.79,8,8,0,0,Spin-Friendly,160,Team_B,Bat,296.33,278.65,187,Team_B
+M0598,13-02-2026,Chennai,Canada,Australia,Group,18,2,36.86,72.24,4,23,0,0,Spin-Friendly,155,Team_A,Bat,70.96,285.08,149,Team_B
+M0599,21-02-2026,Delhi,Namibia,Pakistan,Group,15,4,48.37,53.93,1,7,0,0,Pace-Friendly,170,Team_B,Bat,129.25,253.03,197,Team_A
+M0600,07-02-2026,Delhi,Netherlands,Canada,Group,11,18,56.36,46.5,5,0,0,0,Pace-Friendly,170,Team_A,Bat,192.85,96.3,187,Team_A
