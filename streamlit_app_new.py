@@ -44,7 +44,7 @@ if option == "Manual Entry":
     venue = st.selectbox("Venue", ["Chennai","Mumbai","Kolkata","Delhi","Ahmedabad","Colombo"])
     team_a = st.text_input("Team A")
     team_b = st.text_input("Team B")
-    stage = st.selectbox("Stage", ["Group","Super8","Final"])
+    stage = st.selectbox("Stage", ["Group","Super8","SemiFinal","Final"])
     team_a_rank = st.number_input("Team A Ranking", min_value=1, max_value=20)
     team_b_rank = st.number_input("Team B Ranking", min_value=1, max_value=20)
     team_a_form = st.number_input("Team A Form", min_value=0.0)
@@ -94,7 +94,7 @@ if option == "Manual Entry":
 else:
     st.subheader("Upload Match_Test.csv for Batch Predictions")
 
-    # --- GitHub Download Option ---
+    # --- GitHub Download Option (use raw link) ---
     GITHUB_URL = "https://raw.githubusercontent.com/mandyamavinash/T20-World-Cup-2026/main/Match_Test.csv"
     if st.button("Fetch Sample Test Data from GitHub"):
         response = requests.get(GITHUB_URL)
@@ -108,54 +108,71 @@ else:
         else:
             st.error("Could not fetch file from GitHub. Please check the URL.")
 
-    uploaded_file = st.file_uploader("Upload Match_Test.csv", type="csv")
+    uploaded_file = st.file_uploader("Upload Match_Test.csv", type=["csv"])
 
     if uploaded_file:
-        df_test = pd.read_csv(uploaded_file)
-        st.write("Test Dataset Preview:", df_test.head())
+        try:
+            # Explicitly read as tab-delimited
+            df_test = pd.read_csv(uploaded_file, delimiter="\t")
+        except Exception as e:
+            st.error(f"Could not parse file: {e}")
+            df_test = None
 
-        # Drop ID/date if present
-        for col in ["Match_ID", "Date"]:
-            if col in df_test.columns:
-                df_test = df_test.drop(col, axis=1)
+        if df_test is not None:
+            st.write("Test Dataset Preview:", df_test.head())
 
-        # Separate target if available
-        y_true = None
-        if "Winner" in df_test.columns:
-            y_true = df_test["Winner"]
-            df_test = df_test.drop("Winner", axis=1)
+            # Drop unwanted columns if present
+            drop_cols = ["Match_ID", "Date", "Winner"]
+            df_test = df_test.drop(columns=[c for c in drop_cols if c in df_test.columns])
 
-        # One-hot encode categorical features
-        categorical_cols = ['Venue','Team_A','Team_B','Stage','Pitch_Type','Toss_Winner','Toss_Decision']
-        df_test = pd.get_dummies(df_test, columns=categorical_cols, drop_first=True)
+            # Separate target if available
+            y_true = None
+            if "Winner" in df_test.columns:
+                y_true = df_test["Winner"]
+                df_test = df_test.drop("Winner", axis=1)
 
-        # Align with training columns
-        df_test = df_test.reindex(columns=training_cols, fill_value=0)
+            # Define expected categorical columns
+            expected_categorical_cols = ['Venue','Team_A','Team_B','Stage',
+                                         'Pitch_Type','Toss_Winner','Toss_Decision']
 
-        # Scale
-        df_test_scaled = scaler.transform(df_test)
+            # Only encode those present
+            categorical_cols = [col for col in expected_categorical_cols if col in df_test.columns]
 
-        st.subheader("Batch Predictions")
-        for name, model in models.items():
-            preds = model.predict(df_test_scaled)
-            winners = label_encoder.inverse_transform(preds)
-            df_test[f"{name}_Prediction"] = winners
+            # Warn if any expected columns are missing
+            missing = set(expected_categorical_cols) - set(df_test.columns)
+            if missing:
+                st.warning(f"Missing categorical columns in uploaded file: {missing}")
 
-            # --- Evaluation Metrics if ground truth available ---
-            if y_true is not None:
-                acc = accuracy_score(y_true, winners)
-                st.write(f"**{name} Accuracy:** {acc:.2f}")
+            # One-hot encode
+            df_test = pd.get_dummies(df_test, columns=categorical_cols, drop_first=True)
 
-                st.write(f"### {name} Confusion Matrix")
-                cm = confusion_matrix(y_true, winners, labels=label_encoder.classes_)
-                fig, ax = plt.subplots()
-                sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
-                            xticklabels=label_encoder.classes_,
-                            yticklabels=label_encoder.classes_, ax=ax)
-                st.pyplot(fig)
+            # Align with training columns
+            df_test = df_test.reindex(columns=training_cols, fill_value=0)
 
-                st.write(f"### {name} Classification Report")
-                st.text(classification_report(y_true, winners))
+            # Scale
+            df_test_scaled = scaler.transform(df_test)
 
-        st.write("Predictions Table:", df_test)
-        st.download_button("Download Predictions CSV", df_test.to_csv(index=False), "Match_Test_Predictions.csv")
+            st.subheader("Batch Predictions")
+            for name, model in models.items():
+                preds = model.predict(df_test_scaled)
+                winners = label_encoder.inverse_transform(preds)
+                df_test[f"{name}_Prediction"] = winners
+
+                # --- Evaluation Metrics if ground truth available ---
+                if y_true is not None:
+                    acc = accuracy_score(y_true, winners)
+                    st.write(f"**{name} Accuracy:** {acc:.2f}")
+
+                    st.write(f"### {name} Confusion Matrix")
+                    cm = confusion_matrix(y_true, winners, labels=label_encoder.classes_)
+                    fig, ax = plt.subplots()
+                    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
+                                xticklabels=label_encoder.classes_,
+                                yticklabels=label_encoder.classes_, ax=ax)
+                    st.pyplot(fig)
+
+                    st.write(f"### {name} Classification Report")
+                    st.text(classification_report(y_true, winners))
+
+            st.write("Predictions Table:", df_test)
+            st.download_button("Download Predictions CSV", df_test.to_csv(index=False), "Match_Test_Predictions.csv")
