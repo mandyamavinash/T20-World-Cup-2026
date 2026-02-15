@@ -1,10 +1,14 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import seaborn as sns
+import matplotlib.pyplot as plt
+import requests
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 MODEL_DIR = "model"
 
-# Load scaler, label encoder, training columns
+# Load preprocessing artifacts
 scaler = joblib.load(f"{MODEL_DIR}/scaler.pkl")
 label_encoder = joblib.load(f"{MODEL_DIR}/label_encoder.pkl")
 training_cols = joblib.load(f"{MODEL_DIR}/training_columns.pkl")
@@ -23,7 +27,7 @@ models = {
 selected_model_name = st.selectbox(
     "Choose a model for prediction:",
     list(models.keys()),
-    index=list(models.keys()).index("LogisticRegression")  # Default to LogisticRegression
+    index=list(models.keys()).index("LogisticRegression")
 )
 selected_model = models[selected_model_name]
 
@@ -89,6 +93,21 @@ if option == "Manual Entry":
 # -------------------------------
 else:
     st.subheader("Upload Match_Test.csv for Batch Predictions")
+
+    # --- GitHub Download Option ---
+    GITHUB_URL = "https://raw.githubusercontent.com/mandyamavinash/T20-World-Cup-2026/main/Match_Test.csv"
+    if st.button("Fetch Sample Test Data from GitHub"):
+        response = requests.get(GITHUB_URL)
+        if response.status_code == 200:
+            st.download_button(
+                label="Download Match_Test.csv",
+                data=response.content,
+                file_name="Match_Test.csv",
+                mime="text/csv"
+            )
+        else:
+            st.error("Could not fetch file from GitHub. Please check the URL.")
+
     uploaded_file = st.file_uploader("Upload Match_Test.csv", type="csv")
 
     if uploaded_file:
@@ -96,11 +115,14 @@ else:
         st.write("Test Dataset Preview:", df_test.head())
 
         # Drop ID/date if present
-        if "Match_ID" in df_test.columns and "Date" in df_test.columns:
-            df_test = df_test.drop(["Match_ID","Date"], axis=1)
+        for col in ["Match_ID", "Date"]:
+            if col in df_test.columns:
+                df_test = df_test.drop(col, axis=1)
 
-        # Drop Winner if present (since we want to predict it)
+        # Separate target if available
+        y_true = None
         if "Winner" in df_test.columns:
+            y_true = df_test["Winner"]
             df_test = df_test.drop("Winner", axis=1)
 
         # One-hot encode categorical features
@@ -118,6 +140,22 @@ else:
             preds = model.predict(df_test_scaled)
             winners = label_encoder.inverse_transform(preds)
             df_test[f"{name}_Prediction"] = winners
+
+            # --- Evaluation Metrics if ground truth available ---
+            if y_true is not None:
+                acc = accuracy_score(y_true, winners)
+                st.write(f"**{name} Accuracy:** {acc:.2f}")
+
+                st.write(f"### {name} Confusion Matrix")
+                cm = confusion_matrix(y_true, winners, labels=label_encoder.classes_)
+                fig, ax = plt.subplots()
+                sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
+                            xticklabels=label_encoder.classes_,
+                            yticklabels=label_encoder.classes_, ax=ax)
+                st.pyplot(fig)
+
+                st.write(f"### {name} Classification Report")
+                st.text(classification_report(y_true, winners))
 
         st.write("Predictions Table:", df_test)
         st.download_button("Download Predictions CSV", df_test.to_csv(index=False), "Match_Test_Predictions.csv")
